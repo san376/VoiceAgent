@@ -7,7 +7,7 @@ import React from 'react'
 function Login() {
 
 
-  // Ised to sign in with Google
+  // Is used to sign in with Google
 
   const signInWithGoogle=async()=>{
     const {error}=await supabase.auth.signInWithOAuth({
