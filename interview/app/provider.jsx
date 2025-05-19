@@ -1,4 +1,4 @@
-'use client'
+"use client"
 import { UserDetailContext } from '@/context/UserDetailContext';
 import { supabase } from '@/services/supabaseClient';
 import React, { useContext, useEffect, useState } from 'react'

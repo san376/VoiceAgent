@@ -14,7 +14,7 @@ function Login() {
       provider:'google'
     })
     if(error){
-      console.log('Error:',error.message)
+      console.error('Error:',error.message)
     }
   }
 
