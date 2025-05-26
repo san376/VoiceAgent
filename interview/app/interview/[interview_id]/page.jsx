@@ -51,11 +51,10 @@ function Interview() {
              .from('Interviews')
              .select('*')
              .eq('interview_id',interview_id)
-
         console.log(Interviews[0]);     
         setInterviewInfo({
             userName:userName,
-            interviewData:Interview[0]
+            interviewData:Interviews[0]
         });
         router.push('/interview/'+interview_id+'/start')
         setLoading(false )
