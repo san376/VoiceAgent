@@ -93,7 +93,7 @@ export const InterviewType = [
 ]
 
 
-export const  QUESTIONS_PROMPT = `You are an expert technical interviewer.
+export const QUESTIONS_PROMPT = `You are an expert technical interviewer.
 Based on the following inputs, generate a well-structured list of high-quality interview questions:
 Job Title: {{jobTitle}}
 Job Description: {{jobDescription}}
@@ -115,3 +115,24 @@ format: interviewQuestions=[
 ...
 }]
 The Goal is to create a structured, relevant, and time-opr=timised interview plan for a {{job Title}} role.`
+
+
+export const FEEDBACK_PROMPT = `{{conversation}}
+Depends on this Interview Conversation between assitant and user,
+Give me feedback for user interview. Give me rating out of 10 for technical Skills,
+Communication, Problem Solving, Experince. Also give me summery in 3 lines
+about the interview and one line to let me know whether is recommanded
+for hire or not with msg. Give me response in JSON format
+{
+   feedback:{
+      rating:{
+        "technicalSkills": <number out of 10>,
+      "communication": <number out of 10>,
+      "problemSolving": <number out of 10>,
+      "experience": <number out of 10>
+      },
+      summery:<in 3 Line>,
+    recommendation: "<Yes or No>",
+    recommendationMsg: "<One-line recommendation message>"
+   }
+}`

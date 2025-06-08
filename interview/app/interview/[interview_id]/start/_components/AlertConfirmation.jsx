@@ -7,7 +7,7 @@ function AlertConfirmation({children,stopInterview}) {
   return (
     <Alert>
   <Terminal className="h-4 w-4" />
-      <AlertTitle>Heads up!</AlertTitle>
+      <AlertTitle></AlertTitle>
       <AlertDescription onClick={()=>stopInterview()}>
         {children}
       </AlertDescription>

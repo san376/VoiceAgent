@@ -1,11 +1,16 @@
 "use client"
 import { InterviewDataContext } from '@/context/InterviewDataContext'
-import { Mic, Phone, Timer } from 'lucide-react';
+import { Loader2Icon, Mic, Phone, Timer } from 'lucide-react';
 import Image from 'next/image';
 import React, { useContext, useEffect, useState } from 'react'
 import Vapi from "@vapi-ai/web";
 import AlertConfirmation from './_components/AlertConfirmation';
 import { toast } from 'sonner';
+import axios from 'axios';
+import { supabase } from '@/services/supabaseClient';
+import { useParams, useRouter } from 'next/navigation';
+import TimeComponent from '../../_components/TimeComponent';
+import Link from 'next/link';
 
 
 function StartInterview() {
@@ -13,6 +18,13 @@ function StartInterview() {
 
   const vapi = new Vapi(process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY)
   const [activeUser, setActiveUser] = useState(false);
+
+  const [conversation, setConversation] = useState();
+  const { interview_id } = useParams();
+  const router = useRouter();
+  const [loading, setLoading] = useState();
+  const [callEnded, setCallEnded] = useState(false);
+
 
 
   useEffect(() => {
@@ -82,26 +94,134 @@ Key Guidelines:
   }
 
   const stopInterview = () => {
+      setLoading(true);
     vapi.stop();
   }
 
-  vapi.on("call-start", () => {
-    console.log("Call has started");
-    toast('Call Connected...');
-  })
+  // vapi.on("call-start", () => {
+  //   console.log("Call has started");
+  //   toast('Call Connected...');
+  // })
 
-  vapi.on("speech-start", () => {
-    console.log("Assistant speech has started.")
-    setActiveUser(false)
-  });
-  vapi.on("speech-end", () => {
-    console.log("Assistant speech has ended.")
-    setActiveUser(true)
-  });
-  vapi.on("call-end", () => {
-    console.log("Call has ended")
-    toast("Interview Ended")
-  })
+  // vapi.on("speech-start", () => {
+  //   console.log("Assistant speech has started.")
+  //   setActiveUser(false)
+  // });
+  // vapi.on("speech-end", () => {
+  //   console.log("Assistant speech has ended.")
+  //   setActiveUser(true)
+  // });
+  // vapi.on("call-end", () => {
+  //   console.log("Call has ended")
+  //   toast("Interview Ended")
+  //   GenerateFeedback();
+  // })
+  // vapi.on("message", (message) => {
+  //   console.log(message?.conversation);
+  //   setConversation(message?.conversation);
+  // })
+
+
+  useEffect(() => {
+  if (callEnded ) {
+    GenerateFeedback();
+    setCallEnded(false); // reset flag
+  }
+}, [callEnded]);
+
+
+  useEffect(() => {
+    const handleMessage = (message) => {
+      console.log('Message:', message);
+      if (message?.conversation) {
+        const convoString = JSON.stringify(message.conversation);
+        console.log('Conversation string:', convoString);
+        setConversation(convoString);
+      }
+    };
+
+    vapi.on("message", handleMessage);
+
+    vapi.on("call-start", () => {
+      console.log("Call has started");
+      toast('Call Connected...');
+    })
+
+    vapi.on("speech-start", () => {
+      console.log("Assistant speech has started.")
+      setActiveUser(false)
+    });
+    vapi.on("speech-end", () => {
+      console.log("Assistant speech has ended.")
+      setActiveUser(true)
+    });
+    // vapi.on("call-end", () => {
+    //   console.log("Call has ended")
+    //   toast("Interview Ended")
+    //   //GenerateFeedback();
+    // })
+    vapi.on("call-end", () => {
+  console.log("Call has ended");
+  toast("Interview Ended");
+  setCallEnded(true);  // Don't call GenerateFeedback yet
+});
+
+    // vapi.on("call-end", () => {
+    //   console.log("Call has ended")
+    //   toast("Interview Ended")
+
+    //   // ✅ Delay feedback generation to allow setConversation to complete
+    //   setTimeout(() => {
+    //     GenerateFeedback();
+    //   }, 2000);
+    // })
+
+
+    // Clean up the listener
+    return () => {
+      vapi.off("message", handleMessage);
+      vapi.off("call-start", () => console.log("END"));
+      vapi.off("speech-start", () => console.log("END"));
+      vapi.off("speech-end", () => console.log("END"));
+      vapi.off("call-end", () => console.log("END"));
+    };
+  }, []);
+
+
+
+  const GenerateFeedback = async () => {
+    const result = await axios.post('/api/ai-feedback', {
+      conversation: conversation
+    })
+    console.log(result?.data);
+    const Content = result.data.content;
+    //const FINAL_CONTENT = Content.replace('```json','').replace('```','')
+
+    const FINAL_CONTENT = Content.replace(/```json\s*|\s*```/g, '');
+    console.log(FINAL_CONTENT);
+
+
+
+    const { data, error } = await supabase
+      .from('interview-feedback')
+      .insert([
+        {
+          userName: interviewInfo?.userName,
+          userEmail: interviewInfo?.userEmail,
+          interview_id: interview_id,
+          feedback: JSON.parse(FINAL_CONTENT),
+          // feedback:FINAL_CONTENT,
+          recommended: false
+        },
+      ])
+      .select()
+    console.log(data)
+    router.replace('/interview/' + interview_id + '/completed')
+    setLoading(false);
+
+
+
+  }
 
 
 
@@ -110,23 +230,26 @@ Key Guidelines:
       <h2 className='font-bold text-xl flex justify-between'>AI Interview Session
         <span className='flex gap-2 items-center'>
           <Timer />
-          00:00:00
+          {/* 00:00:00 */}
+          <TimeComponent start={true} />
         </span>
       </h2>
 
       <div className='grid grid-cols-1 md:grid-cols-2 gap-7 mt-5'>
         <div className='bg-white h-[400px] rounded-lg border flex flex-col gap-3 items-center justify-center'>
-          {!activeUser && <span className='absolute insert-0 rounded-full bg-blue-500 opacity-75 animate-ping' />}
-          <Image src={'/ai.jpeg'} alt='ai'
-            width={100}
-            height={100}
-            className='w-[60px] h-[60px] rounded-full object-cover'
-          />
+          <div className='relative'>
+            {!activeUser && <span className='absolute inset-0 rounded-full bg-blue-500 opacity-75 animate-ping' />}
+            <Image src={'/ai.jpeg'} alt='ai'
+              width={100}
+              height={100}
+              className='w-[60px] h-[60px] rounded-full object-cover'
+            />
+          </div>
           <h2>AI Recruiter</h2>
         </div>
         <div className='bg-white h-[400px] rounded-lg border flex flex-col gap-3 items-center justify-center'>
           <div className='relative'>
-            {!activeUser && <span className='absolute insert-0 rounded-full bg-blue-500 opacity-75 animate-ping' />}
+            {activeUser && <span className='absolute inset-0 rounded-full bg-blue-500 opacity-75 animate-ping' />}
             <h2 className='text-2xl bg-primary text-white p-5 rounded-full'>{interviewInfo?.userName[0]}</h2>
           </div>
           <h2>{interviewInfo?.userName}</h2>
@@ -135,9 +258,15 @@ Key Guidelines:
 
       <div className='flex items-center gap-5 justify-center mt-7'>
         <Mic className='h-12 w-12 p-3 bg-gray-500 text-white rounded-full cursor-pointer' />
-        <AlertConfirmation stopInterview={() => vapi.stop()}>
-          <Phone className='h-12 w-12 p-3 bg-red-500 text-white rounded-full cursor-pointer' />
-        </AlertConfirmation>
+        {/* <Link href={'/interview/' + interview_id + '/completed'} alt='complete'> */}
+        {/* <AlertConfirmation stopInterview={() => vapi.stop()}> */}
+        {/* {!loading ? <Phone className='h-12 w-12 p-3 bg-red-500 text-white rounded-full cursor-pointer'
+              onClick={() => stopInterview()}
+            /> : <Loader2Icon className='animate-spin' />} */}
+        <Phone className='h-12 w-12 p-3 bg-red-500 text-white rounded-full cursor-pointer'
+          onClick={() => stopInterview()}/>
+        {/* </AlertConfirmation> */}
+        {/* </Link> */}
       </div>
       <h2 className='text-sm text-gray-400 text-center mt-5'>Interview in Progress</h2>
     </div>
