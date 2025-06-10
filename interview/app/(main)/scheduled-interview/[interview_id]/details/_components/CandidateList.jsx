@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button'
 import moment from 'moment'
 import React from 'react'
+import CandidateFeedbackDialog from './CandidateFeedbackDialog'
 
 function CandidateList({candidateList}) {
   return (
@@ -17,7 +18,7 @@ function CandidateList({candidateList}) {
           </div>
           <div className='flex gap-3 items-center'>
             <h2 className='text-green-500'>7.5/10</h2>
-            <Button variant={outline} className='text-primary'>View Report</Button>
+            <CandidateFeedbackDialog candidate={candidate}/>
           </div>
         </div>
       ))}
