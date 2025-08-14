@@ -52,4 +52,3 @@ function AllInterview() {
 }
 
 export default AllInterview
-AllInterview
