@@ -15,17 +15,22 @@ import { Plus } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useRouter } from "next/navigation"
 
 export function AppSidebar() {
 
     const path=usePathname();
+    const router=useRouter()
     console.log(path);
+    const goToDashboard=()=>{
+        router.push('/dashboard/create-interview')
+    }
 
     return (
         <Sidebar>
             <SidebarHeader className='flex items-center -mt-8'>
                 <Image src={'/voice.png'} alt="logo" width={200} height={100} className="w-[150px] " />
-                <Button className='w-full -mt-5'><Plus /> Cretae New Interview</Button>
+                <Button onClick={goToDashboard} className='w-full -mt-5'><Plus /> Create New Interview</Button>
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
