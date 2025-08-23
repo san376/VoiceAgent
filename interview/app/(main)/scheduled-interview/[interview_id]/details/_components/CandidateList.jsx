@@ -44,7 +44,7 @@ function CandidateList({candidateList}) {
             <h2 className='bg-primary p-3 px-5 font-bold text-white rounded-full'>{candidate.userName[0]}</h2>
           <div>
             <h2>{candidate?.userName}</h2>
-            <h2 className='text-gray-500 text-sm'>Completed On: {moment(candidate?.created_at).format('MMM DD, YYY')}</h2>
+            <h2 className='text-gray-500 text-sm'>Completed On: {moment(candidate?.created_at).format('MMM DD, YYYY')}</h2>
           </div>
           </div>
           <div className='flex gap-3 items-center'>
