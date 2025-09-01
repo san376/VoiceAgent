@@ -40,7 +40,7 @@ function LatestInterviewList() {
         <div className='p-5 flex flex-col gap-3 items-center mt-5'>
           <Video className='h-10 w-10 text-primary' />
           <h2>You don't have any interview created!</h2>
-          <Button onClick={goToDashboard}>+ Create New Interview</Button>
+          <Button onClick={goToDashboard} className=' cursor-pointer'>+ Create New Interview</Button>
         </div>
       }
       {interviewList &&

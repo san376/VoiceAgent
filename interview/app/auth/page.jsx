@@ -49,6 +49,7 @@ function Login() {
               height={400}
               className='w-[500px] h-[250px] rounded-2xl'
             />
+            {/* width and height → Needed by Next.js for image optimization and layout stability. ( Inside Image) */}
             <h2 className='text-2xl font-bold text-center mt-5'>Welcome to AiCruiter</h2>
             <p className='text-gray-500 text-center'>Sign In With Google Authentication</p>
             <Button className='mt-7 w-full' onClick={signInWithGoogle} >Login with Google</Button>

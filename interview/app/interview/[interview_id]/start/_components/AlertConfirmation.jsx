@@ -1,17 +1,36 @@
 import React from 'react'
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import { Terminal } from 'lucide-react'
 
 
 function AlertConfirmation({children,stopInterview}) {
   return (
-    <Alert>
-  <Terminal className="h-4 w-4" />
-      <AlertTitle></AlertTitle>
-      <AlertDescription onClick={()=>stopInterview()}>
-        {children}
-      </AlertDescription>
-</Alert>
+<AlertDialog>
+  <AlertDialogTrigger>{children}</AlertDialogTrigger>
+  <AlertDialogContent>
+    <AlertDialogHeader>
+      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+      <AlertDialogDescription>
+        This action cannot be undone. This will permanently delete your Information
+        and remove your data from our servers.
+      </AlertDialogDescription>
+    </AlertDialogHeader>
+    <AlertDialogFooter>
+      <AlertDialogCancel>Cancel</AlertDialogCancel>
+      <AlertDialogAction onClick={()=>stopInterview()}>Continue</AlertDialogAction>
+    </AlertDialogFooter>
+  </AlertDialogContent>
+</AlertDialog>    
 
 
   )

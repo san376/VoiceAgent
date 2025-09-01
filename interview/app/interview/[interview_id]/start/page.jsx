@@ -11,6 +11,7 @@ import { supabase } from '@/services/supabaseClient';
 import { useParams, useRouter } from 'next/navigation';
 import TimeComponent from '../../_components/TimeComponent';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 
 function StartInterview() {
@@ -97,6 +98,8 @@ Key Guidelines:
       setLoading(true);
     vapi.stop();
   }
+  
+
 
   // vapi.on("call-start", () => {
   //   console.log("Call has started");
@@ -258,15 +261,15 @@ Key Guidelines:
 
       <div className='flex items-center gap-5 justify-center mt-7'>
         <Mic className='h-12 w-12 p-3 bg-gray-500 text-white rounded-full cursor-pointer' />
-        {/* <Link href={'/interview/' + interview_id + '/completed'} alt='complete'> */}
-        {/* <AlertConfirmation stopInterview={() => vapi.stop()}> */}
-        {/* {!loading ? <Phone className='h-12 w-12 p-3 bg-red-500 text-white rounded-full cursor-pointer'
+        <Link href={'/interview/' + interview_id + '/completed'} alt='complete'>
+        <AlertConfirmation stopInterview={() => stopInterview()}>
+        {!loading ? <Phone className='h-12 w-12 p-3 bg-red-500 text-white rounded-full cursor-pointer'
               onClick={() => stopInterview()}
-            /> : <Loader2Icon className='animate-spin' />} */}
-        <Phone className='h-12 w-12 p-3 bg-red-500 text-white rounded-full cursor-pointer'
-          onClick={() => stopInterview()}/>
-        {/* </AlertConfirmation> */}
-        {/* </Link> */}
+            /> : <Loader2Icon className='animate-spin' />}
+        {/* <Button className='h-12 w-12 p-3 bg-red-500 text-white rounded-full cursor-pointer'
+          onClick={() => stopInterview()}>End</Button> */}
+        </AlertConfirmation>
+        </Link>
       </div>
       <h2 className='text-sm text-gray-400 text-center mt-5'>Interview in Progress</h2>
     </div>

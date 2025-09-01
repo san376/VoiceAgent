@@ -30,7 +30,7 @@ export function AppSidebar() {
         <Sidebar>
             <SidebarHeader className='flex items-center -mt-8'>
                 <Image src={'/voice.png'} alt="logo" width={200} height={100} className="w-[150px] " />
-                <Button onClick={goToDashboard} className='w-full -mt-5'><Plus /> Create New Interview</Button>
+                <Button onClick={goToDashboard} className='w-full -mt-5 cursor-pointer'><Plus /> Create New Interview</Button>
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>

@@ -19,11 +19,11 @@ function InterviewComplete() {
                     className=' object-cover mt-4'
                 />
             </div>
-            <div className='flex flex-col items-center justify-center mt-4 bg-blue-50'>
+            <div className='flex flex-col items-center justify-center mt-4 bg-blue-50 mb-10'>
                 <h2 className='text-2xl font-bold'>What's Next</h2>
                 <p>The recruiter will review your interview responses and will contact you</p>
                 <p>Soon regarding the next step</p>
-                <div className='flex gap-4'>
+                <div className='flex gap-4 mb-15'>
                     <TimerIcon/>
                     Responses within 2-3 business days
                 </div>
