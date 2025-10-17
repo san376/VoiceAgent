@@ -84,13 +84,14 @@ const Provider = ({ children }) => {
                             picture: user?.user_metadata?.picture
                         }
                     ])
-                    
+
                 console.log(data);
                 setUser(data);
                 return;
             }
 
             setUser(Users[0]);
+            
         })
     }
     return (
