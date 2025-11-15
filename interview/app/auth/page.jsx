@@ -18,7 +18,7 @@ function Login() {
   //     console.error('Error:',error.message)
   //   }
   // }
-  const router = useRouter();   // ✅ init router
+  const router = useRouter();   //  init router
 
   // Sign in with Google
   const signInWithGoogle = async () => {

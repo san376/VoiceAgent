@@ -41,15 +41,18 @@ function StartInterview() {
 
     console.log(questionList)
 
+    // user speaks -> deepgram converts to text -> sent to openai -> response text -> playht converts to speech -> vapi plays to user
 
     const assistantOptions = {
       name: "AI Recruiter",
       firstMessage: "Hi " + interviewInfo?.userName + ", how are you? Ready for your interview on " + interviewInfo?.interviewData?.jobPosition,
+      // The Speech-to-Text provider → converts USER SPEECH to TEXT
       transcriber: {
         provider: "deepgram",
         model: "nova-2",
         language: "en-US",
       },
+      // The Voice provider → converts that TEXT to SPEECH
       voice: {
         provider: "playht",
         voiceId: "jennifer",
@@ -212,8 +215,8 @@ Key Guidelines:
           userName: interviewInfo?.userName,
           userEmail: interviewInfo?.userEmail,
           interview_id: interview_id,
-          feedback: JSON.parse(FINAL_CONTENT),
-          // feedback:FINAL_CONTENT,
+          // feedback: JSON.parse(FINAL_CONTENT),
+          feedback:FINAL_CONTENT,
           recommended: false
         },
       ])
