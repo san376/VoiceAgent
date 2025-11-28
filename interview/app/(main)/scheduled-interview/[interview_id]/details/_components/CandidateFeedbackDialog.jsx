@@ -10,12 +10,21 @@
 // import { Button } from '@/components/ui/button'
 // import { Progress } from '@/components/ui/progress'
 // function CandidateFeedbackDialog({ candidate }) {
-//     const feedback = candidate?.feedback?.feedback
+//     let feedback = candidate?.feedback?.feedback
+
+// // Convert outer JSON string → object
+// if (typeof feedback === "string") {
+//     try {
+//         feedback = JSON.parse(feedback)?.feedback;
+//     } catch (e) {
+//         console.error("Invalid JSON:", e);
+//     }
+// }
 //     return (
 //         <div>
 //             <Dialog>
 //                 <DialogTrigger asChild>
-//                     <Button variant={outline} className='text-primary'>View Report</Button>
+//                     <Button variant="outline" className='text-primary'>View Report</Button>
 //                 </DialogTrigger>
 //                 <DialogContent>
 //                     <DialogHeader>
@@ -98,10 +107,24 @@ import {
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 function CandidateFeedbackDialog({ candidate }) {
-    const feedback = candidate?.feedback?.feedback
+    // const feedback = candidate?.feedback?.feedback
+    //  const parsed = candidate?.feedback ? JSON.parse(candidate?.feedback) : null;
+    // const feedback = parsed?.feedback;
+    let parsed = null;
 
-    const tot=(feedback?.rating?.technicalSkills)+(feedback?.rating?.communication)+(feedback?.rating?.problemSolving)+(feedback?.rating?.experience);
-    const avg=tot/4;
+    if (typeof candidate?.feedback === "string") {
+        // feedback is stored as a JSON string → parse it
+        parsed = JSON.parse(candidate.feedback);
+    } else {
+        // feedback is already an object
+        parsed = candidate?.feedback;
+    }
+
+    const feedback = parsed?.feedback || parsed;
+
+
+    const tot = (feedback?.rating?.technicalSkills) + (feedback?.rating?.communication) + (feedback?.rating?.problemSolving) + (feedback?.rating?.experience);
+    const avg = tot / 4;
     return (
         <div>
             <Dialog>
@@ -179,3 +202,5 @@ function CandidateFeedbackDialog({ candidate }) {
 }
 
 export default CandidateFeedbackDialog
+
+

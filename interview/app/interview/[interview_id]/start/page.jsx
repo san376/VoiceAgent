@@ -202,8 +202,8 @@ Key Guidelines:
     console.log(result?.data);
     const Content = result.data.content;
     //const FINAL_CONTENT = Content.replace('```json','').replace('```','')
-
-    const FINAL_CONTENT = Content.replace(/```json\s*|\s*```/g, '');
+    const FINAL_CONTENT = Content.replace(/```json\s*|\s*```/g, ''); 
+    console.log(100);
     console.log(FINAL_CONTENT);
 
 
@@ -221,6 +221,7 @@ Key Guidelines:
         },
       ])
       .select()
+      console.log(200);
     console.log(data)
     router.replace('/interview/' + interview_id + '/completed')
     setLoading(false);
